@@ -1,26 +1,28 @@
 package com.librarymanagementsystem.service;
 
-import com.librarymanagementsystem.model.Member;
-import com.librarymanagementsystem.repository.MemeberRepository;
-
-import java.awt.desktop.SystemEventListener;
+import com.librarymanagementsystem.model.BorrowRecord;
+import com.librarymanagementsystem.model.Book;
+import com.librarymanagementsystem.repository.BorrowRepository;
 
 public class BorrowService {
 
-    private final MemeberRepository repository = new MemeberRepository();
+    private final BorrowRepository repository = new BorrowRepository();
 
-    public void addMember(Member member){
-        repository.save(member);
-    }
+    public void borrowBook(Book book, int memberId){
 
-    public void displayMembers(){
-        for (Member member: repository.findAll()){
-            System.out.println(member);
+        if (!book.isAvailable()){
+            System.out.println("Book Unavailable");
+            return;
         }
-    }
 
-    public Member findMember(int id){
-        return repository.findById(id);
-    }
+        book.setAvailable(false);
 
+        repository.save(
+                new BorrowRecord(
+                        book.getId(), memberId
+                )
+        );
+
+        System.out.println("Book Borrowed Successfully");
+    }
 }
