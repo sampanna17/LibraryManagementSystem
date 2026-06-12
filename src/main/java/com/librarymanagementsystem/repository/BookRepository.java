@@ -19,9 +19,13 @@ public class BookRepository {
         return books;
     }
 
-    public Optional<Book> findById(int id){
-        return books.stream()
-                .filter(book -> book.getId() == id)
-                .findFirst();
+    public Book findById(int id){
+        for (Book book : books){
+            if (book.getId() == id){
+                return book;
+            }
+        }
+
+        return null;
     }
 }
