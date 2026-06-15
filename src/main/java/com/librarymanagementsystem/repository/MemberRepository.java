@@ -4,7 +4,7 @@ import com.librarymanagementsystem.model.Member;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MemeberRepository {
+public class MemberRepository {
 
     private final List<Member> members = new ArrayList<>();
 

@@ -1,7 +1,9 @@
 package com.librarymanagementsystem.service;
 
+import com.librarymanagementsystem.exception.BookNotFoundException;
 import com.librarymanagementsystem.repository.BookRepository;
 import com.librarymanagementsystem.model.Book;
+import com.librarymanagementsystem.util.ValidationUtil;
 
 public class BookService {
 
@@ -10,7 +12,19 @@ public class BookService {
             new BookRepository();
 
     public void addBook(Book book){
-        new BookRepository();
+        ValidationUtil.validateId(
+                book.getId()
+        );
+
+        ValidationUtil.validateBookTitle(
+                book.getTitle()
+        );
+
+        ValidationUtil.validateAuthor(
+                book.getAuthor()
+        );
+
+        repository.save(book);
     }
 
     public void displayBooks(){
@@ -19,8 +33,18 @@ public class BookService {
         }
     }
 
-    public Book findBook(int id){
-        return repository.findById(id);
+    public Book findBook(int id) {
+
+        Book book = repository.findById(id);
+
+        if (book == null) {
+
+            throw new BookNotFoundException(
+                    "Book not found with ID: " + id
+            );
+        }
+
+        return book;
     }
 
 }

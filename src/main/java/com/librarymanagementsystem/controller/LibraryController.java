@@ -1,5 +1,7 @@
 package com.librarymanagementsystem.controller;
 
+import com.librarymanagementsystem.exception.BookNotFoundException;
+import com.librarymanagementsystem.exception.BookUnavailableException;
 import com.librarymanagementsystem.model.Book;
 import com.librarymanagementsystem.model.Member;
 import com.librarymanagementsystem.service.BookService;
@@ -7,88 +9,124 @@ import com.librarymanagementsystem.service.BorrowService;
 import com.librarymanagementsystem.service.MemberService;
 
 import java.util.Scanner;
+
 public class LibraryController {
 
     private final Scanner sc = new Scanner(System.in);
 
-    private final BookService bookService =new BookService();
+    private final BookService bookService = new BookService();
     private final BorrowService borrowService = new BorrowService();
-    private final MemberService memberService =  new MemberService();
+    private final MemberService memberService = new MemberService();
 
-    public void start(){
-        while(true){
-            System.out.println("\n===== LIBRARY =====");
-            System.out.println("1. Add Book");
-            System.out.println("2. View Books");
-            System.out.println("3. Add Member");
-            System.out.println("4. View Members");
-            System.out.println("5. Borrow Book");
-            System.out.println("6. Exit");
+    public void start() {
 
-            int choice = sc.nextInt();
+        while (true) {
 
-            switch (choice) {
+            try {
 
-                case 1 -> addBook();
+                System.out.println("\n===== LIBRARY =====");
+                System.out.println("1. Add Book");
+                System.out.println("2. View Books");
+                System.out.println("3. Add Member");
+                System.out.println("4. View Members");
+                System.out.println("5. Borrow Book");
+                System.out.println("6. Exit");
 
-                case 2 -> bookService.displayBooks();
+                System.out.print("Enter Choice: ");
+                int choice = Integer.parseInt(sc.nextLine());
 
-                case 3 -> addMember();
+                switch (choice) {
 
-                case 4 -> memberService.displayMembers();
+                    case 1 -> addBook();
 
-                case 5 -> borrowBook();
+                    case 2 -> bookService.displayBooks();
 
-                case 6 -> System.exit(0);
+                    case 3 -> addMember();
 
-                default -> System.out.println("Invalid Option");
+                    case 4 -> memberService.displayMembers();
+
+                    case 5 -> borrowBook();
+
+                    case 6 -> {
+                        System.out.println("Thank you for using Library System.");
+                        return;
+                    }
+
+                    default -> System.out.println("Invalid Option");
+                }
+
+            } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
     }
 
-    private void addBook(){
-        System.out.print("Book ID: ");
-        int id = sc.nextInt();
-        sc.nextLine();
+    private void addBook() {
 
-        System.out.print("Title: ");
-        String title = sc.nextLine();
+        try {
 
-        System.out.print("Author: ");
-        String author = sc.nextLine();
+            System.out.print("Book ID: ");
+            int id = Integer.parseInt(sc.nextLine());
 
-        bookService.addBook(
-                new Book(id, title, author)
-        );
+            System.out.print("Title: ");
+            String title = sc.nextLine();
+
+            System.out.print("Author: ");
+            String author = sc.nextLine();
+
+            bookService.addBook(
+                    new Book(id, title, author)
+            );
+
+            System.out.println("Book added successfully.");
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    private void addMember(){
-        System.out.print("Member ID: ");
-        int id = sc.nextInt();
-        sc.nextLine();
+    private void addMember() {
 
-        System.out.print("Name: ");
-        String name = sc.nextLine();
+        try {
 
-        memberService.addMember(
-                new Member(id, name)
-        );
+            System.out.print("Member ID: ");
+            int id = Integer.parseInt(sc.nextLine());
+
+            System.out.print("Name: ");
+            String name = sc.nextLine();
+
+            memberService.addMember(
+                    new Member(id, name)
+            );
+
+            System.out.println("Member added successfully.");
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    private void borrowBook(){
+    private void borrowBook() {
 
-        System.out.print("Book ID: ");
-        int bookId = sc.nextInt();
+        try {
 
-        System.out.print("Member ID: ");
-        int memberId = sc.nextInt();
+            System.out.print("Book ID: ");
+            int bookId = Integer.parseInt(sc.nextLine());
 
-        Book book = bookService.findBook(bookId);
+            System.out.print("Member ID: ");
+            int memberId = Integer.parseInt(sc.nextLine());
 
-        if (book != null) {
+            Book book = bookService.findBook(bookId);
+
             borrowService.borrowBook(book, memberId);
-        } else {
-            System.out.println("Book not found");
+
+            System.out.println("Book borrowed successfully.");
+
+        } catch (BookNotFoundException |
+                 BookUnavailableException |
+                 IllegalArgumentException e) {
+
+            System.out.println(e.getMessage());
         }
     }
 }

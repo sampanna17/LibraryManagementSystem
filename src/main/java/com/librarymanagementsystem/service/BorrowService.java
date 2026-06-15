@@ -1,5 +1,6 @@
 package com.librarymanagementsystem.service;
 
+import com.librarymanagementsystem.exception.BookUnavailableException;
 import com.librarymanagementsystem.model.BorrowRecord;
 import com.librarymanagementsystem.model.Book;
 import com.librarymanagementsystem.repository.BorrowRepository;
@@ -10,19 +11,20 @@ public class BorrowService {
 
     public void borrowBook(Book book, int memberId){
 
-        if (!book.isAvailable()){
-            System.out.println("Book Unavailable");
-            return;
+        if (!book.isAvailable()) {
+
+            throw new BookUnavailableException(
+                    "Book is already borrowed"
+            );
         }
 
         book.setAvailable(false);
 
         repository.save(
                 new BorrowRecord(
-                        book.getId(), memberId
+                        book.getId(),
+                        memberId
                 )
         );
-
-        System.out.println("Book Borrowed Successfully");
     }
 }
