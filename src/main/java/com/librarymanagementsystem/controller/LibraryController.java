@@ -1,7 +1,9 @@
 package com.librarymanagementsystem.controller;
 
+import com.librarymanagementsystem.dto.ApiResponse;
 import com.librarymanagementsystem.exception.BookNotFoundException;
 import com.librarymanagementsystem.exception.BookUnavailableException;
+import com.librarymanagementsystem.exception.GlobalExceptionHandler;
 import com.librarymanagementsystem.model.Book;
 import com.librarymanagementsystem.model.Member;
 import com.librarymanagementsystem.service.BookService;
@@ -39,16 +41,12 @@ public class LibraryController {
                 switch (choice) {
 
                     case 1 -> addBook();
-
                     case 2 -> bookService.displayBooks();
-
-                    case 3 -> addMember();
-
-                    case 4 -> memberService.displayMembers();
-
-                    case 5 -> borrowBook();
-
-                    case 6 -> {
+                    case 3 -> findBookById();
+                    case 4 -> addMember();
+                    case 5 -> memberService.displayMembers();
+                    case 6 -> borrowBook();
+                    case 7 -> {
                         System.out.println("Thank you for using Library System.");
                         return;
                     }
@@ -130,4 +128,24 @@ public class LibraryController {
             System.out.println(e.getMessage());
         }
     }
+    private void findBookById() {
+
+        try {
+            System.out.print("Enter Book ID: ");
+            int id = Integer.parseInt(sc.nextLine());
+
+            Book book = bookService.findBook(id);
+
+            System.out.println(new ApiResponse<>(
+                    200,
+                    true,
+                    "Book found successfully",
+                    book
+            ));
+
+        } catch (Exception e) {
+            GlobalExceptionHandler.handle(e);
+        }
+    }
+
 }

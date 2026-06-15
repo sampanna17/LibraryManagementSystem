@@ -35,21 +35,7 @@ public class BookService {
     }
 
     public Book findBook(int id) {
-        try{
-            Book book = repository.findById(id);
-            System.out.println(new ApiResponse<>(
-                    200,
-                    true,
-                    "Book found successfully",
-                    book
-            ));
-
-        } catch (Exception e) {
-            GlobalExceptionHandler.handle(e);
-
-        }
-
-        return null;
+        return repository.findById(id);
     }
 
 }
