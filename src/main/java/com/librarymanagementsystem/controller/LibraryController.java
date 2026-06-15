@@ -27,10 +27,11 @@ public class LibraryController {
                 System.out.println("\n===== LIBRARY =====");
                 System.out.println("1. Add Book");
                 System.out.println("2. View Books");
-                System.out.println("3. Add Member");
-                System.out.println("4. View Members");
-                System.out.println("5. Borrow Book");
-                System.out.println("6. Exit");
+                System.out.println("3. View Books By ID");
+                System.out.println("4. Add Member");
+                System.out.println("5. View Members");
+                System.out.println("6. Borrow Book");
+                System.out.println("7. Exit");
 
                 System.out.print("Enter Choice: ");
                 int choice = Integer.parseInt(sc.nextLine());

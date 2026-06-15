@@ -1,6 +1,7 @@
 package com.librarymanagementsystem.service;
 
-import com.librarymanagementsystem.exception.BookNotFoundException;
+import com.librarymanagementsystem.dto.ApiResponse;
+import com.librarymanagementsystem.exception.GlobalExceptionHandler;
 import com.librarymanagementsystem.repository.BookRepository;
 import com.librarymanagementsystem.model.Book;
 import com.librarymanagementsystem.util.ValidationUtil;
@@ -34,17 +35,21 @@ public class BookService {
     }
 
     public Book findBook(int id) {
+        try{
+            Book book = repository.findById(id);
+            System.out.println(new ApiResponse<>(
+                    200,
+                    true,
+                    "Book found successfully",
+                    book
+            ));
 
-        Book book = repository.findById(id);
+        } catch (Exception e) {
+            GlobalExceptionHandler.handle(e);
 
-        if (book == null) {
-
-            throw new BookNotFoundException(
-                    "Book not found with ID: " + id
-            );
         }
 
-        return book;
+        return null;
     }
 
 }

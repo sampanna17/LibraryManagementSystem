@@ -1,5 +1,6 @@
 package com.librarymanagementsystem.repository;
 
+import com.librarymanagementsystem.exception.BookNotFoundException;
 import com.librarymanagementsystem.model.Book;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class BookRepository {
             }
         }
 
-        return null;
+        throw new BookNotFoundException("Book not found with id: " + id);
     }
 }
+
