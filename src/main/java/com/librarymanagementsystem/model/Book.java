@@ -7,38 +7,54 @@ public class Book {
     private String author;
     private boolean available;
 
-    public Book (int id, String title, String author){
+    // Required by Jackson
+    public Book() {
+    }
+
+    public Book(int id, String title, String author) {
         this.id = id;
         this.title = title;
         this.author = author;
         this.available = true;
     }
 
-    public int getId(){
+    public int getId() {
         return id;
     }
 
-    public String getTitle(){
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getAuthor() {
         return author;
     }
 
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     public boolean isAvailable() {
         return available;
     }
 
-    public void setAvailable(boolean available){
-        this.available =  available;
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return String.format(
-            "ID: %d | Title: %s | Author: %s  | Available: %s",
-            id, title, author, available ? "Yes" : "No"
+                "ID: %d | Title: %s | Author: %s | Available: %s",
+                id, title, author, available ? "Yes" : "No"
         );
     }
 }

@@ -2,26 +2,30 @@ package com.librarymanagementsystem.repository;
 
 import com.librarymanagementsystem.exception.BookNotFoundException;
 import com.librarymanagementsystem.model.Book;
+import com.librarymanagementsystem.util.FileUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class BookRepository {
 
-    // Stores all books in memory
-    private final List<Book> books = new ArrayList<>();
+    private final List<Book> books;
 
-    public void save(Book book){
+    public BookRepository() {
+        this.books = FileUtil.read();
+    }
+
+    public void save(Book book) {
         books.add(book);
+        FileUtil.write(books);
     }
 
     public List<Book> findAll() {
         return books;
     }
 
-    public Book findById(int id){
-        for (Book book : books){
-            if (book.getId() == id){
+    public Book findById(int id) {
+        for (Book book : books) {
+            if (book.getId() == id) {
                 return book;
             }
         }
@@ -29,4 +33,3 @@ public class BookRepository {
         throw new BookNotFoundException("Book not found with id: " + id);
     }
 }
-

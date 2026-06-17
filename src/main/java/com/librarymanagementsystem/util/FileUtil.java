@@ -1,25 +1,43 @@
 package com.librarymanagementsystem.util;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.librarymanagementsystem.model.Book;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FileUtil {
 
-    public static void save(String fileName,
-                            String data) {
+    private static final String FILE_PATH = "data/books.json";
+    private static final ObjectMapper mapper = new ObjectMapper();
 
-        try (FileWriter writer =
-                     new FileWriter(fileName, true)) {
+    // READ
+    public static List<Book> read() {
+        try {
+            File file = new File(FILE_PATH);
 
-            writer.write(data);
-            writer.write("\n");
+            if (!file.exists()) {
+                return new ArrayList<>();
+            }
 
-        } catch (IOException e) {
+            Book[] books = mapper.readValue(file, Book[].class);
+            return new ArrayList<>(Arrays.asList(books));
 
-            System.out.println(
-                    "Error writing file: "
-                            + e.getMessage()
-            );
+        } catch (Exception e) {
+            System.out.println("Error reading file: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    // WRITE
+    public static void write(List<Book> books) {
+        try {
+            mapper.writerWithDefaultPrettyPrinter()
+                    .writeValue(new File(FILE_PATH), books);
+        } catch (Exception e) {
+            System.out.println("Error writing file: " + e.getMessage());
         }
     }
 }
